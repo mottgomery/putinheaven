@@ -1,0 +1,400 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  color: white;
+  font-family: main;
+  font-size:14px;
+  cursor: url("../images/Normal-Select.png"),auto;
+}
+
+  .crt::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 2px, 3px 100%;
+  pointer-events: none;
+}
+
+@keyframes flicker {
+  0% {
+  opacity: 0.27861;
+  }
+  5% {
+  opacity: 0.34769;
+  }
+  10% {
+  opacity: 0.23604;
+  }
+  15% {
+  opacity: 0.10626;
+  }
+  20% {
+  opacity: 0.18128;
+  }
+  25% {
+  opacity: 0.10626;
+  }
+  30% {
+  opacity: 0.18128;
+  }
+  35% {
+  opacity: 0.23604;
+  }
+}
+
+.crt::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(18, 16, 16, 0.1);
+  opacity: 0;
+  z-index: 2;
+  pointer-events: none;
+  animation: flicker 0.15s infinite;
+}
+
+
+@font-face {
+  font-family:main;
+  src: url("../fonts/lucon.ttf") format("truetype");
+}
+
+@font-face {
+    font-family:windows;
+    src: url("../fonts/WindowsRegular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family:whiterabbit;
+    src: url('../fonts/whitrabt.woff') format('woff');
+}
+
+body::-webkit-scrollbar {
+    display: none; 
+}
+
+body {
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+    
+}
+
+
+body {
+  overflow-x:hidden; 
+  padding-bottom:40px;
+}
+
+#everything {
+  background-image: url("../images/back.jpg");
+  background-size: cover;
+  display: flex;
+  margin-bottom:-50px;
+  justify-content: center; 
+  align-items: center;
+  flex-direction: column; 
+  padding-top: 17px;
+  width:100vw;
+  height:100vh;
+  padding-bottom:30px;
+  
+}
+
+#everything * {
+ background-color: transparent; 
+}
+
+#thetitle {
+  font-family: whiterabbit,'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size:35px;
+}
+
+#contents {
+  width:100%;
+  height:100%;
+  flex-direction: row;
+  justify-content: flex-start;
+  display: flex;
+  margin:0px;
+  margin-top: 40px;
+  margin-bottom:20px;
+}
+
+.content {
+  height:600px;
+  padding:10px;
+}
+
+#left {
+    margin-left:10px; 
+    width:350px;
+  padding-left:10px;
+}
+
+#center {
+    margin-left:10px; 
+
+    /*border : 2px white solid;*/
+    width:750px;
+    overflow-x: hidden;
+    background-color: lightgrey;
+    color:black;
+    border-top: 4px solid white;
+    border-left: 4px solid white;
+    border-bottom: 6px solid grey;
+    border-right: 6px solid grey; 
+}
+
+#right {
+    width:550px;
+     padding-left:10px;
+}
+
+
+#gifwall{ 
+  width: fit-content;
+  margin: 20px;
+  border: 1px solid white;
+}
+
+
+#chatbox {
+ position:absolute;
+ left:60px;
+ bottom:70px;
+}
+
+#chatbox iframe{
+  position:sticky;
+  overflow:hidden;
+  border:none;
+  height:250px;
+  width:250px;
+
+}
+
+#counter {
+  color:white;
+  margin-top: 20px;
+}
+        
+.blink{
+    display: none;
+}
+
+
+
+#bsod{
+    background-color: rgb(11,0,156);
+    font-family: windows,'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    letter-spacing: 4px;
+    overflow:hidden;
+    width:100vw;
+    height:100vh;
+    /*height:calc(100vh - 30px);*/
+    padding-top: 30px;
+    padding-left: 30px;
+    color:white;
+    cursor :url("../images/Working-In-Background.png"), auto;
+}
+
+#bsod p, #bsod span {
+  background-color: rgb(11,0,156);
+
+}
+
+nav {
+  margin-bottom:25px;
+}
+
+nav div {
+  margin-top:20px;
+  display:flex;
+  align-items: center; 
+  margin-left:30px;
+}
+
+
+nav div :hover{
+  text-decoration:underline;
+  cursor: url("../images/Link-Select.png"),auto;
+}
+
+nav div :active{
+  text-decoration:none;
+}
+
+.window {
+    display: flex;
+    flex-direction: column;
+    padding: 1px;
+    width: 100%;
+    height: 90%;
+    background-color: gainsboro;
+    border: 2px solid black;
+    border-top: 2px solid white;
+    border-left: 2px solid white;
+}
+
+.windowbar {
+    display: flex;
+    justify-content:flex-end;
+    padding: 3px 4px;
+    margin:0px;
+    padding-right: 0px;
+    height:15px;
+    color:white;
+    font-size: 10px;
+    background-color: grey;
+    border: 2px solid black;
+    border-top: 2px solid white;
+    border-left: 2px solid white;
+
+}
+
+#childbar {
+    background-color: rgb(11,0,156);
+   
+}
+
+.button{
+    background-color: gainsboro;
+    border-top: 2px solid white;
+    border-left: 2px solid white;
+}
+
+.button *:hover{
+    cursor: url("../images/Link-Select.png"),auto;
+}
+
+a *:hover{
+  cursor: url("../images/Link-Select.png"),auto;
+}
+
+button :hover{
+  cursor: url("../images/Link-Select.png"),auto;
+}
+
+#childbar .button {
+    background-color: gainsboro;
+}
+
+.button:active{
+    border : 2px solid white;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+}
+
+.windowbar img{
+    position:sticky;
+    left:8px;
+
+}
+
+#logo img{
+ position:relative;
+ left:-585px;
+}
+
+#logo span{
+ position:relative;
+ left:-580px;
+ bottom:1.5px;
+}
+
+.windowbar .button {
+    height: 16px;
+    width: 16px;
+    margin-right: 1px;
+}
+
+.windowbar .button img{
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+.option div{
+  font-family:main;
+    display: inline-flex;
+    /*width: fit-content;*/
+    color:black;
+    font-size: 9px;
+    margin: 0px;
+    padding:3px 6px;
+    margin-left: 5px;
+    height:17px;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.option *{
+
+    color:black;
+
+}
+
+.option div *:hover{
+    background-color: rgb(231, 229, 229);
+    cursor: url("../images/Link-Select.png"),auto;
+}
+
+iframe :hover{
+    cursor: url("../images/Link-Select.png"),auto;
+}
+
+#mainpage {
+ background-color:white;
+
+}
+
+#mainpage *{
+ color:black;
+}
+
+.windowcontent {
+    padding:10px;
+    margin-bottom: 15px;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    height:90%;
+    width:96%;
+    color:black;
+    font-size: 13px;
+    background-color: white;
+    border: 2px solid white;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+}
+.windowcontent *{
+
+    background-color: inherit;
+
+}
+
+.childcontent {
+  background-color:white; 
+}
+.carousel-images {
+            display: flex;
+}
+
+.carousel-images img {
+    width: 219px;
+    height: 165px;
+    object-fit: cover;
+}
+
+
+

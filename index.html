@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⋆♱ ПУТЬ В РАЙ ♱⋆</title>
+  <style>
+    @font-face { font-family: main; src: url("fonts/lucon.ttf") format("truetype"); }
+    @font-face { font-family: windows; src: url("fonts/WindowsRegular.ttf") format("truetype"); }
+    @font-face { font-family: whiterabbit; src: url('fonts/whitrabt.woff') format('woff'); }
+
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+      cursor: url("images/Normal-Select.png"), auto;
+    }
+
+    :root {
+      --red:   #cc0000;
+      --dim:   #888;
+      --bg:    #080808;
+      --green: #00ff41;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--bg);
+      overflow: hidden;
+      font-family: main, 'Courier New', monospace;
+      color: #fff;
+    }
+    body::-webkit-scrollbar { display: none; }
+
+    /* ═══════════════════════════════
+       CRT OVERLAY
+    ═══════════════════════════════ */
+    #crt {
+      position: fixed; inset: 0; z-index: 999; pointer-events: none;
+    }
+    #crt::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.30) 50%),
+        linear-gradient(90deg, rgba(255,0,0,0.05), rgba(0,255,0,0.02), rgba(0,0,255,0.05));
+      background-size: 100% 2px, 3px 100%;
+    }
+    #crt::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(18,16,16,0.07);
+      animation: flicker 0.12s infinite;
+    }
+    @keyframes flicker {
+      0%   { opacity: 0.28; }
+      15%  { opacity: 0.10; }
+      30%  { opacity: 0.18; }
+      50%  { opacity: 0.34; }
+      70%  { opacity: 0.10; }
+      100% { opacity: 0.28; }
+    }
+
+    /* ═══════════════════════════════
+       GRAIN OVERLAY
+    ═══════════════════════════════ */
+    #grain {
+      position: fixed; inset: 0; z-index: 998; pointer-events: none;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      animation: grainmove 0.4s steps(1) infinite;
+    }
+    @keyframes grainmove {
+      0%   { background-position: 0 0; }
+      25%  { background-position: -50px 20px; }
+      50%  { background-position: 30px -40px; }
+      75%  { background-position: -20px 60px; }
+      100% { background-position: 0 0; }
+    }
+
+    /* ═══════════════════════════════
+       BACKGROUND — fog / mist
+    ═══════════════════════════════ */
+    #bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 80%, rgba(40,0,0,0.6) 0%, transparent 70%),
+        radial-gradient(ellipse 120% 80% at 50% 100%, rgba(20,0,0,0.9) 0%, transparent 60%),
+        linear-gradient(180deg, #0a0008 0%, #0d0005 40%, #120003 100%);
+      background-image: url("images/back.jpg");
+      background-size: cover;
+      background-position: center;
+    }
+    /* dark vignette on top of bg image */
+    #bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 100% 100% at 50% 50%, transparent 30%, rgba(0,0,0,0.85) 100%),
+        linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.8) 100%);
+    }
+
+    /* ═══════════════════════════════
+       MAIN WRAPPER
+    ═══════════════════════════════ */
+    #wrapper {
+      position: relative; z-index: 10;
+      width: 100vw; height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    /* ═══════════════════════════════
+       TOP HUD — REC / time
+    ═══════════════════════════════ */
+    #hud {
+      position: fixed; top: 14px; left: 0; right: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      font-size: 11px;
+      color: var(--dim);
+      pointer-events: none;
+    }
+    .hud-rec {
+      display: flex; align-items: center; gap: 6px;
+      color: var(--red);
+    }
+    .hud-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+    .hud-right { text-align: right; }
+    #hud-clock { color: #aaa; }
+
+    /* ═══════════════════════════════
+       TITLE BLOCK
+    ═══════════════════════════════ */
+    #title-block {
+      text-align: center;
+      margin-bottom: 28px;
+      position: relative;
+    }
+    .agency-label {
+      font-size: 10px;
+      letter-spacing: 6px;
+      color: var(--dim);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .main-title {
+      font-family: whiterabbit, 'Courier New', monospace;
+      font-size: clamp(32px, 5vw, 58px);
+      letter-spacing: 4px;
+      line-height: 1;
+      color: #fff;
+      text-shadow:
+        3px 0   0 rgba(204,0,0,0.8),
+        -2px 0  0 rgba(0,200,255,0.6),
+        0   2px 20px rgba(255,0,0,0.3);
+      animation: titleglitch 6s infinite;
+      position: relative;
+    }
+    .main-title::before,
+    .main-title::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      overflow: hidden;
+    }
+    .main-title::before {
+      color: rgba(255,0,0,0.7);
+      animation: glitch1 6s infinite;
+      clip-path: inset(0 0 60% 0);
+    }
+    .main-title::after {
+      color: rgba(0,255,255,0.5);
+      animation: glitch2 6s infinite;
+      clip-path: inset(60% 0 0 0);
+    }
+    @keyframes glitch1 {
+      0%,90%,100% { transform: translateX(0); opacity: 0; }
+      92% { transform: translateX(-4px); opacity: 1; }
+      94% { transform: translateX(3px); opacity: 1; }
+      96% { transform: translateX(0); opacity: 0; }
+    }
+    @keyframes glitch2 {
+      0%,92%,100% { transform: translateX(0); opacity: 0; }
+      94% { transform: translateX(4px); opacity: 1; }
+      96% { transform: translateX(-2px); opacity: 1; }
+      98% { transform: translateX(0); opacity: 0; }
+    }
+    @keyframes titleglitch {
+      0%,89%,100% { text-shadow: 3px 0 0 rgba(204,0,0,0.8), -2px 0 0 rgba(0,200,255,0.6), 0 2px 20px rgba(255,0,0,0.3); }
+      90% { text-shadow: -3px 0 0 rgba(204,0,0,0.8), 3px 0 0 rgba(0,200,255,0.6), 0 2px 20px rgba(255,0,0,0.3); }
+      91% { text-shadow: 3px 0 0 rgba(204,0,0,0.8), -2px 0 0 rgba(0,200,255,0.6), 0 2px 20px rgba(255,0,0,0.3); }
+    }
+    .tagline {
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 3px;
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════
+       VHS PLAYER — the promo video
+    ═══════════════════════════════ */
+    #player-shell {
+      position: relative;
+      width: 520px;
+    }
+
+    /* VCR body */
+    .vcr-body {
+      background: linear-gradient(180deg, #1c1c1c 0%, #141414 60%, #0f0f0f 100%);
+      border: 2px solid #333;
+      border-top: 2px solid #555;
+      border-left: 2px solid #555;
+      border-radius: 4px 4px 2px 2px;
+      padding: 14px 16px 12px;
+      box-shadow:
+        0 8px 40px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    /* screen area */
+    .vcr-screen-wrap {
+      position: relative;
+      background: #000;
+      border: 3px solid #0a0a0a;
+      border-top: 3px solid #222;
+      border-left: 3px solid #222;
+      margin-bottom: 10px;
+      /* 4:3 aspect ratio */
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+
+    /* the actual video */
+    #promo-video {
+      width: 100%; height: 100%;
+      display: block;
+      object-fit: cover;
+      position: relative; z-index: 1;
+    }
+
+    /* VHS tracking lines over video */
+    .vcr-screen-wrap::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 2;
+      background:
+        linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.18) 50%);
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+
+    /* VHS signal glitch bars — random horizontal noise */
+    .vcr-screen-wrap::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 18%;
+      z-index: 3;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px, transparent 3px,
+        rgba(255,255,255,0.02) 3px, rgba(255,255,255,0.02) 4px
+      );
+      animation: tracking 8s linear infinite;
+      opacity: 0.5;
+    }
+    @keyframes tracking {
+      0%   { transform: translateY(0) scaleX(1.01); opacity: 0.5; }
+      50%  { transform: translateY(-4px) scaleX(0.99); opacity: 0.8; }
+      100% { transform: translateY(0) scaleX(1.01); opacity: 0.5; }
+    }
+
+    /* on-screen overlay: PLAY indicator etc. */
+    #screen-overlay {
+      position: absolute; inset: 0; z-index: 4;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 8px 10px;
+    }
+    .osd-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      font-size: 11px; color: rgba(255,255,255,0.7);
+      text-shadow: 1px 1px 0 #000;
+    }
+    .osd-play {
+      color: var(--green);
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+    .osd-timecode {
+      font-size: 10px;
+      color: rgba(200,200,200,0.6);
+      letter-spacing: 2px;
+    }
+    .osd-bottom {
+      font-size: 9px;
+      color: rgba(150,150,150,0.5);
+      letter-spacing: 1px;
+    }
+
+    /* big play button overlay — shown when paused */
+    #play-overlay {
+      position: absolute; inset: 0; z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.55);
+      transition: opacity 0.3s;
+      cursor: url("images/Link-Select.png"), pointer;
+    }
+    #play-overlay.hidden { opacity: 0; pointer-events: none; }
+
+    .play-icon {
+      width: 60px; height: 60px;
+      border: 3px solid rgba(255,255,255,0.6);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .play-icon::before {
+      content: '';
+      border-style: solid;
+      border-width: 14px 0 14px 24px;
+      border-color: transparent transparent transparent rgba(255,255,255,0.8);
+      margin-left: 4px;
+    }
+    /* static noise when "paused" */
+    .static-noise {
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)' opacity='0.4'/%3E%3C/svg%3E");
+      background-size: 128px 128px;
+      animation: staticroll 0.08s steps(1) infinite;
+      opacity: 0.15;
+      z-index: 0;
+    }
+    @keyframes staticroll {
+      0%   { background-position: 0 0; }
+      25%  { background-position: -30px 15px; }
+      50%  { background-position: 20px -20px; }
+      75%  { background-position: -10px 30px; }
+      100% { background-position: 0 0; }
+    }
+
+    /* ═══════════════════════════════
+       VCR CONTROLS
+    ═══════════════════════════════ */
+    .vcr-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* tape slot */
+    .tape-slot {
+      flex: 1;
+      height: 12px;
+      background: #0a0a0a;
+      border: 2px solid #0a0a0a;
+      border-top: 2px solid #333;
+      border-left: 2px solid #333;
+      position: relative;
+      overflow: hidden;
+    }
+    .tape-slot-inner {
+      position: absolute; top: 3px; left: 6px; right: 6px; bottom: 3px;
+      background: #111;
+      border-top: 1px solid #222;
+    }
+
+    /* label strip */
+    .vcr-label {
+      background: #1a0000;
+      border: 1px solid #400;
+      padding: 2px 8px;
+      font-size: 9px;
+      color: #cc4444;
+      letter-spacing: 2px;
+      white-space: nowrap;
+    }
+
+    /* buttons */
+    .vcr-btn {
+      width: 28px; height: 22px;
+      background: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+      border: 1px solid #111;
+      border-top: 1px solid #444;
+      border-left: 1px solid #444;
+      color: #aaa;
+      font-size: 9px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: url("images/Link-Select.png"), pointer;
+      user-select: none;
+      transition: background 0.1s;
+    }
+    .vcr-btn:active, .vcr-btn.active {
+      border-top: 1px solid #111;
+      border-left: 1px solid #111;
+      border-bottom: 1px solid #444;
+      border-right: 1px solid #444;
+      background: linear-gradient(180deg, #141414, #1f1f1f);
+    }
+
+    /* LED display */
+    .vcr-display {
+      background: #001a00;
+      border: 1px solid #003300;
+      border-top: 1px solid #001100;
+      border-left: 1px solid #001100;
+      padding: 2px 8px;
+      font-size: 10px;
+      color: var(--green);
+      letter-spacing: 2px;
+      min-width: 80px;
+      text-align: center;
+      text-shadow: 0 0 6px var(--green);
+    }
+
+    /* ═══════════════════════════════
+       CASSETTE LABEL below player
+    ═══════════════════════════════ */
+    .cassette-info {
+      margin-top: 8px;
+      background: #0e0e0e;
+      border-top: 1px solid #222;
+      padding: 6px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9px;
+      color: #444;
+    }
+    .cassette-side { color: var(--red); letter-spacing: 2px; }
+    .cassette-brand { letter-spacing: 3px; }
+
+    /* ═══════════════════════════════
+       ENTER BUTTON
+    ═══════════════════════════════ */
+#enter-btn {
+  margin-top: 24px;
+  font-family: whiterabbit, 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 4px;
+  color: #ff2a2a;
+  text-decoration: none;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 18px;
+
+  border: 1px solid rgba(255,0,0,0.35);
+  background: rgba(30,0,0,0.55);
+
+  box-shadow:
+    0 0 12px rgba(255,0,0,0.15),
+    inset 0 0 12px rgba(255,0,0,0.08);
+
+  backdrop-filter: blur(2px);
+
+  transition:
+    color 0.2s,
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.15s;
+
+  cursor: url("images/Link-Select.png"), pointer;
+
+  animation: pulse-dim 3s ease-in-out infinite;
+}
+
+#enter-btn:hover {
+  color: #fff;
+  background: rgba(80,0,0,0.75);
+  border-color: rgba(255,0,0,0.7);
+
+  text-shadow: 0 0 10px rgba(255,0,0,0.7);
+
+  transform: scale(1.03);
+}
+
+#enter-btn::before,
+#enter-btn::after {
+  content: '─────';
+  color: rgba(255,0,0,0.35);
+}
+    /* ═══════════════════════════════
+       BOTTOM CRAWL
+    ═══════════════════════════════ */
+    #crawl-wrap {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
+      overflow: hidden;
+      height: 20px;
+      background: rgba(0,0,0,0.7);
+      border-top: 1px solid #1a1a1a;
+      pointer-events: none;
+    }
+    #crawl {
+      white-space: nowrap;
+      font-size: 10px;
+      color: #cc0000;
+      letter-spacing: 2px;
+      line-height: 20px;
+      display: inline-block;
+      animation: crawlmove 70s linear infinite;
+    }
+    @keyframes crawlmove {
+      0%   { transform: translateX(100vw); }
+      100% { transform: translateX(-100%); }
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- overlays -->
+<div id="crt"></div>
+<div id="grain"></div>
+<div id="bg"></div>
+
+<!-- HUD -->
+<div id="hud">
+  <div class="hud-rec">
+    <div class="hud-dot"></div>
+    <span>REC</span>
+  </div>
+  <div class="hud-right">
+    <div id="hud-clock">00:00:00</div>
+    <div style="color:#333;font-size:9px;margin-top:2px;">SP · T-120</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="wrapper">
+
+  <!-- Title -->
+  <div id="title-block">
+    <div class="agency-label">похоронное агентство</div>
+    <div class="main-title" data-text="⋆♱ ПУТЬ В РАЙ ♱⋆">⋆♱ ПУТЬ В РАЙ ♱⋆</div>
+    <div class="tagline">следуем слову Господнему · с 1978 · закрыты по воскресеньям</div>
+  </div>
+
+  <!-- VCR Player -->
+  <div id="player-shell">
+    <div class="vcr-body">
+
+      <!-- Screen -->
+      <div class="vcr-screen-wrap" id="screen-wrap">
+        <div class="static-noise"></div>
+        <video id="promo-video" loop>
+          <!-- Replace with your actual video file -->
+          <source src="tape 1.mp4" type="video/mp4">
+        </video>
+
+        <!-- Scanlines + tracking handled by ::before/::after -->
+
+        <!-- On-screen display -->
+        <div id="screen-overlay">
+          <div class="osd-top">
+            <span class="osd-play" id="osd-play">▶ PLAY</span>
+            <span class="osd-timecode" id="osd-tc">00:00:00:00</span>
+          </div>
+          <div class="osd-bottom">SP · PROMO ©1978</div>
+        </div>
+
+        <!-- Play button overlay -->
+        <div id="play-overlay" onclick="togglePlay()">
+          <div class="play-icon"></div>
+        </div>
+      </div>
+
+      <!-- Controls row -->
+      <div class="vcr-controls">
+        <div class="vcr-btn" onclick="seekVideo(-10)" title="REW">◀◀</div>
+        <div class="vcr-btn" onclick="togglePlay()" id="btn-play">▶</div>
+        <div class="vcr-btn" onclick="stopVideo()" title="STOP">■</div>
+        <div class="vcr-btn" onclick="seekVideo(10)" title="FF">▶▶</div>
+
+        <div class="tape-slot">
+          <div class="tape-slot-inner"></div>
+        </div>
+
+        <div class="vcr-label"> ⋆♱ PROMO ♱⋆</div>
+        <div class="vcr-display" id="vcr-display">00:00</div>
+      </div>
+
+    </div>
+
+    <!-- cassette footer -->
+    <div class="cassette-info">
+      <span class="cassette-side">SIDE A</span>
+      <span class="cassette-brand">VHS · T-120 · 6HRS</span>
+      <span>⋆♱ ПУТЬ В РАЙ ♱⋆</span>
+    </div>
+  </div>
+
+  <!-- Enter link -->
+  <a href="shop.html" id="enter-btn">ВОЙТИ В МАГАЗИН</a>
+
+</div>
+
+<!-- Bottom crawl -->
+<div id="crawl-wrap">
+  <span id="crawl">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Я долго не понимал, почему люди так боятся тишины. 
+  После полуночи дом начинает говорить сам с собой. 
+  Скрип половиц, старые трубы, шум ветра в вентиляции —
+  всё это похоже на дыхание того, кого уже нет. 
+  Иногда мне кажется, что мёртвые не уходят.
+  Они просто становятся частью стен, частью мебели, частью воздуха.
+  Мы закрываем им глаза, складываем руки, опускаем в землю,
+  но это ничего не меняет. Некоторые всё ещё смотрят.
+  Особенно по воскресеньям.
+  &nbsp;·&nbsp;
+  КРЕМАЦИЯ &nbsp;·&nbsp; ПОГРЕБЕНИЕ &nbsp;·&nbsp; УПОКОЙ &nbsp;·&nbsp;
+  РАБОТАЕМ 24/7 КРОМЕ ВОСКРЕСЕНЬЯ &nbsp;·&nbsp;
+  НЕ ОТВЕЧАЕМ НА ЗВОНКИ ПОСЛЕ ПОЛУНОЧИ &nbsp;·&nbsp;
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span>
+</div>
+
+<script>
+  /* ── CLOCK ── */
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2,'0');
+    const m = String(now.getMinutes()).padStart(2,'0');
+    const s = String(now.getSeconds()).padStart(2,'0');
+    document.getElementById('hud-clock').textContent = `${h}:${m}:${s}`;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  /* ── VIDEO CONTROLS ── */
+  const video = document.getElementById('promo-video');
+  video.volume = 0.2;
+  const playOverlay = document.getElementById('play-overlay');
+  const btnPlay = document.getElementById('btn-play');
+  const osdPlay = document.getElementById('osd-play');
+  const osdTc = document.getElementById('osd-tc');
+  const vcrDisplay = document.getElementById('vcr-display');
+
+  function togglePlay() {
+    if (video.paused) {
+      video.play();
+      playOverlay.classList.add('hidden');
+      btnPlay.textContent = '⏸';
+      osdPlay.textContent = '▶ PLAY';
+    } else {
+      video.pause();
+      playOverlay.classList.remove('hidden');
+      btnPlay.textContent = '▶';
+      osdPlay.textContent = '⏸ PAUSE';
+    }
+  }
+
+  function stopVideo() {
+    video.pause();
+    video.currentTime = 0;
+    playOverlay.classList.remove('hidden');
+    btnPlay.textContent = '▶';
+    osdPlay.textContent = '■ STOP';
+  }
+
+  function seekVideo(sec) {
+    video.currentTime = Math.max(0, video.currentTime + sec);
+  }
+
+  function fmtTime(s) {
+    const m = Math.floor(s / 60);
+    const ss = Math.floor(s % 60);
+    return `${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
+  }
+
+  function fmtTimecode(s) {
+    const h  = Math.floor(s / 3600);
+    const m  = Math.floor((s % 3600) / 60);
+    const ss = Math.floor(s % 60);
+    const ff = Math.floor((s % 1) * 25);
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(ss).padStart(2,'0')}:${String(ff).padStart(2,'0')}`;
+  }
+
+  video.addEventListener('timeupdate', () => {
+    osdTc.textContent = fmtTimecode(video.currentTime);
+    vcrDisplay.textContent = fmtTime(video.currentTime);
+  });
+
+  /* occasional random VHS glitch burst */
+  function randomGlitch() {
+    const wrap = document.getElementById('screen-wrap');
+    wrap.style.filter = `hue-rotate(${Math.random()*30-15}deg) saturate(${0.8+Math.random()*0.4})`;
+    wrap.style.transform = `scaleX(${1 + (Math.random()-0.5)*0.006})`;
+    setTimeout(() => {
+      wrap.style.filter = '';
+      wrap.style.transform = '';
+    }, 80 + Math.random()*120);
+  }
+  setInterval(randomGlitch, 4000 + Math.random()*6000);
+  
+</script>
+<script src="vhs-transition.js"></script> 
+<script src="ambient-audio.js"></script>
+</body>
+</html>

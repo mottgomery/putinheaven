@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⋆♱ ПУТЬ В РАЙ ♱⋆ - КАТАЛОГ</title>
+
+  <style>
+    @font-face {
+      font-family: main;
+      src: url("fonts/lucon.ttf") format("truetype");
+    }
+    @font-face {
+      font-family: windows;
+      src: url("fonts/WindowsRegular.ttf") format("truetype");
+    }
+    @font-face {
+      font-family: whiterabbit;
+      src: url('fonts/whitrabt.woff') format('woff');
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      color: white;
+      font-family: main, 'Courier New', monospace;
+      font-size: 14px;
+      cursor: url("images/Normal-Select.png"), auto;
+      box-sizing: border-box;
+    }
+
+    /* ── CRT EFFECT ── */
+    .crt::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background:
+        linear-gradient(rgba(18,16,16,0) 50%, rgba(0,0,0,0.25) 50%),
+        linear-gradient(90deg, rgba(255,0,0,0.06), rgba(0,255,0,0.02), rgba(0,0,255,0.06));
+      z-index: 100;
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none;
+    }
+
+    @keyframes flicker {
+      0%   { opacity: 0.27861; }
+      5%   { opacity: 0.34769; }
+      10%  { opacity: 0.23604; }
+      15%  { opacity: 0.10626; }
+      20%  { opacity: 0.18128; }
+      25%  { opacity: 0.10626; }
+      30%  { opacity: 0.18128; }
+      35%  { opacity: 0.23604; }
+    }
+    .crt::after {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: rgba(18,16,16,0.1);
+      opacity: 0;
+      z-index: 100;
+      pointer-events: none;
+      animation: flicker 0.15s infinite;
+    }
+
+    /* ── VHS GLITCH HEADER ── */
+    @keyframes glitch-top {
+      0%, 100% { clip-path: inset(0 0 95% 0); transform: translateX(0); }
+      20% { clip-path: inset(0 0 95% 0); transform: translateX(-4px); }
+      40% { clip-path: inset(0 0 95% 0); transform: translateX(4px); }
+    }
+    @keyframes glitch-bot {
+      0%, 100% { clip-path: inset(90% 0 0 0); transform: translateX(0); }
+      20% { clip-path: inset(90% 0 0 0); transform: translateX(4px); }
+      40% { clip-path: inset(90% 0 0 0); transform: translateX(-4px); }
+    }
+    @keyframes scanroll {
+      0%   { background-position: 0 0; }
+      100% { background-position: 0 100px; }
+    }
+    @keyframes vhs-noise {
+      0%   { opacity: 0.03; }
+      50%  { opacity: 0.07; }
+      100% { opacity: 0.03; }
+    }
+    @keyframes blink-rec {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+    @keyframes tape-wobble {
+      0%, 100% { letter-spacing: 2px; }
+      50%       { letter-spacing: 1px; }
+    }
+
+    body {
+      overflow-x: hidden;
+      background-color: #0a0a0a;
+    }
+    body::-webkit-scrollbar { display: none; }
+    body { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ── BACKGROUND ── */
+    #body1 {
+      background-image: url("images/back.jpg");
+      background-size: cover;
+      background-attachment: fixed;
+      min-height: 100vh;
+      position: relative;
+    }
+    /* VHS noise overlay */
+    #body1::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0,0,0,0.15) 2px,
+          rgba(0,0,0,0.15) 4px
+        );
+      z-index: 1;
+      pointer-events: none;
+      animation: vhs-noise 3s ease-in-out infinite;
+    }
+
+    #everything {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 17px 10px 60px;
+      min-height: 100vh;
+    }
+
+    /* ── TOP BAR ── */
+    #topbar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      margin-bottom: 8px;
+    }
+    #topbar nav {
+      display: flex;
+      gap: 20px;
+      margin: 0;
+    }
+    #topbar nav div {
+      margin: 0;
+    }
+    #topbar nav a, #topbar nav p {
+      font-size: 12px;
+      color: #ccc;
+      text-decoration: none;
+      cursor: url("images/Link-Select.png"), auto;
+    }
+    #topbar nav a:hover { text-decoration: underline; color: white; }
+
+    /* ── VHS TAPE HEADER ── */
+    #shop-header {
+      width: 100%;
+      max-width: 1100px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .vhs-cassette-label {
+      background-color: #1a1a1a;
+      border: 3px solid #444;
+      border-top: 3px solid #666;
+      border-left: 3px solid #666;
+      padding: 12px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .vhs-cassette-label::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: repeating-linear-gradient(
+        90deg,
+        #b00 0px, #b00 20px,
+        #222 20px, #222 22px
+      );
+    }
+    .vhs-label-inner {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .vhs-title-block {}
+    .vhs-rec {
+      font-size: 10px;
+      color: #f00;
+      animation: blink-rec 1s step-end infinite;
+      letter-spacing: 2px;
+    }
+    .vhs-main-title {
+      font-family: whiterabbit, 'Courier New', monospace;
+      font-size: 38px;
+      color: #fff;
+      text-shadow: 3px 0 #f00, -2px 0 #0ff;
+      animation: tape-wobble 4s ease-in-out infinite;
+      line-height: 1;
+    }
+    .vhs-subtitle {
+      font-size: 11px;
+      color: #888;
+      letter-spacing: 3px;
+      margin-top: 4px;
+    }
+    .vhs-meta {
+      text-align: right;
+      font-size: 10px;
+      color: #555;
+      line-height: 1.8;
+    }
+    .vhs-meta span { color: #888; }
+
+    /* ── MAIN LAYOUT ── */
+    #shop-layout {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    /* ── SIDEBAR ── */
+    #shop-sidebar {
+      width: 200px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-window {
+      background-color: #c0c0c0;
+      border-top: 3px solid #fff;
+      border-left: 3px solid #fff;
+      border-bottom: 3px solid #444;
+      border-right: 3px solid #444;
+      margin-bottom: 10px;
+    }
+    .sidebar-titlebar {
+      background-color: #000080;
+      padding: 3px 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .sidebar-titlebar span {
+      font-size: 11px;
+      color: white;
+      flex: 1;
+    }
+    .sidebar-btn {
+      width: 14px; height: 14px;
+      background: #c0c0c0;
+      border-top: 2px solid #fff;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #444;
+      border-right: 2px solid #444;
+      font-size: 9px;
+      color: black;
+      display: flex; align-items: center; justify-content: center;
+      cursor: url("images/Link-Select.png"), auto;
+    }
+    .sidebar-content {
+      padding: 8px;
+      background: #c0c0c0;
+    }
+    .sidebar-content * { color: black; background: transparent; }
+    .sidebar-content p {
+      font-size: 11px;
+      margin-bottom: 6px;
+      color: #333;
+    }
+    .filter-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 4px 8px;
+      background: #c0c0c0;
+      border-top: 2px solid #fff;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #444;
+      border-right: 2px solid #444;
+      font-family: main, monospace;
+      font-size: 11px;
+      color: black;
+      margin-bottom: 5px;
+      cursor: url("images/Link-Select.png"), auto;
+    }
+    .filter-btn:active, .filter-btn.active {
+      border-top: 2px solid #444;
+      border-left: 2px solid #444;
+      border-bottom: 2px solid #fff;
+      border-right: 2px solid #fff;
+    }
+    .filter-btn.active { background: #a0a0a0; }
+
+    .cart-display {
+      background: black;
+      border: 1px solid #444;
+      padding: 6px;
+      margin-top: 4px;
+      font-family: main, monospace;
+      font-size: 11px;
+    }
+    .cart-display * { color: #0f0; background: transparent; }
+    .cart-display .cart-label { color: #f00; font-size: 10px; }
+    .cart-item-list { max-height: 120px; overflow-y: auto; margin: 4px 0; }
+    .cart-item-list::-webkit-scrollbar { width: 6px; }
+    .cart-item-list::-webkit-scrollbar-thumb { background: #444; }
+    .cart-row { display: flex; justify-content: space-between; margin-bottom: 2px; }
+    .cart-row .remove-btn {
+      color: #f00;
+      cursor: url("images/Link-Select.png"), auto;
+      font-size: 10px;
+      background: transparent;
+    }
+    .cart-total { border-top: 1px solid #0f0; padding-top: 4px; margin-top: 4px; }
+
+    .checkout-btn {
+      display: block;
+      width: 100%;
+      padding: 5px;
+      background: #c0c0c0;
+      border-top: 2px solid #fff;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #444;
+      border-right: 2px solid #444;
+      font-family: main, monospace;
+      font-size: 11px;
+      color: black;
+      cursor: url("images/Link-Select.png"), auto;
+      margin-top: 6px;
+      text-align: center;
+    }
+    .checkout-btn:active {
+      border-top: 2px solid #444;
+      border-left: 2px solid #444;
+      border-bottom: 2px solid #fff;
+      border-right: 2px solid #fff;
+    }
+
+    /* ── MAIN SHOP WINDOW ── */
+    #shop-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .main-window {
+      background-color: gainsboro;
+      border-top: 4px solid white;
+      border-left: 4px solid white;
+      border-bottom: 6px solid grey;
+      border-right: 6px solid grey;
+    }
+
+    .main-titlebar {
+      background-color: #000080;
+      padding: 3px 4px;
+      display: flex;
+      align-items: center;
+      height: 21px;
+    }
+    .main-titlebar .title-icon { width: 15px; margin-right: 5px; }
+    .main-titlebar .title-text { font-size: 11px; color: white; flex: 1; }
+    .win-btn {
+      width: 16px; height: 16px;
+      background: gainsboro;
+      border-top: 2px solid white;
+      border-left: 2px solid white;
+      border-bottom: 2px solid grey;
+      border-right: 2px solid grey;
+      margin-left: 1px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: url("images/Link-Select.png"), auto;
+    }
+    .win-btn img { max-width: 100%; max-height: 100%; display: block; }
+
+    .menu-bar {
+      background: #c0c0c0;
+      padding: 1px 5px;
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid #888;
+    }
+    .menu-bar div {
+      padding: 2px 8px;
+      font-size: 11px;
+      color: black;
+      background: transparent;
+      cursor: url("images/Link-Select.png"), auto;
+    }
+    .menu-bar div:hover { background: #000080; color: white; }
+    .menu-bar div u { color: inherit; }
+
+    .window-content {
+      background: white;
+      margin: 2px;
+      border-top: 2px solid #888;
+      border-left: 2px solid #888;
+      border-bottom: 2px solid white;
+      border-right: 2px solid white;
+      padding: 12px;
+      min-height: 500px;
+    }
+    .window-content * { color: black; background: transparent; }
+
+    /* address bar style */
+    .address-bar {
+      background: #c0c0c0;
+      padding: 3px 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #888;
+    }
+    .address-bar label { font-size: 11px; color: black; }
+    .address-field {
+      flex: 1;
+      background: white;
+      border-top: 2px solid #888;
+      border-left: 2px solid #888;
+      border-bottom: 2px solid white;
+      border-right: 2px solid white;
+      padding: 2px 5px;
+      font-family: main, monospace;
+      font-size: 11px;
+      color: black;
+    }
+
+    /* ── CATEGORY HEADER ── */
+    .cat-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #c0c0c0;
+    }
+    .cat-header h2 {
+      font-family: whiterabbit, monospace;
+      font-size: 18px;
+      color: #000;
+      background: transparent;
+    }
+    .cat-header .cat-count {
+      font-size: 10px;
+      color: #666;
+      background: #e0e0e0;
+      padding: 2px 6px;
+      border: 1px solid #aaa;
+    }
+
+    /* ── PRODUCT GRID ── */
+    #product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .product-card {
+      background: #c0c0c0;
+      border-top: 2px solid white;
+      border-left: 2px solid white;
+      border-bottom: 2px solid #444;
+      border-right: 2px solid #444;
+      cursor: url("images/Normal-Select.png"), auto;
+      transition: transform 0.05s;
+    }
+    .product-card:active { transform: scale(0.99); }
+
+    .product-img-area {
+      background: black;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* VHS tape texture on image area */
+    .product-img-area::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(0,0,0,0.2) 3px,
+        rgba(0,0,0,0.2) 4px
+      );
+      pointer-events: none;
+    }
+    .product-emoji {
+      font-size: 52px;
+      filter: drop-shadow(0 0 10px rgba(255,0,0,0.4));
+      position: relative;
+      z-index: 1;
+    }
+    .product-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      position: relative; z-index: 1;
+      display: block;
+    }
+
+    /* ── PRODUCT CARD CLICKABLE ── */
+    .product-card {
+      cursor: url("images/Link-Select.png"), auto !important;
+    }
+    .product-card:hover .product-name { text-decoration: underline; }
+
+    /* ── MODAL OVERLAY ── */
+    #modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+    }
+    #modal-overlay.open { display: flex; }
+
+    /* ── MODAL WINDOW (Win98 style) ── */
+    #product-modal {
+      width: 520px;
+      background: #c0c0c0;
+      border-top: 3px solid #fff;
+      border-left: 3px solid #fff;
+      border-bottom: 3px solid #444;
+      border-right: 3px solid #444;
+      position: relative;
+      animation: modal-open 0.08s ease-out;
+    }
+    @keyframes modal-open {
+      from { transform: scale(0.95); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+    #modal-titlebar {
+      background: #000080;
+      padding: 3px 6px;
+      display: flex; align-items: center; gap: 6px;
+      height: 22px;
+    }
+    #modal-titlebar-icon { width: 14px; }
+    #modal-titlebar-text { font-size: 11px; color: white; flex: 1; }
+    #modal-close {
+      width: 16px; height: 16px;
+      background: #c0c0c0;
+      border-top: 2px solid #fff; border-left: 2px solid #fff;
+      border-bottom: 2px solid #444; border-right: 2px solid #444;
+      font-size: 10px; color: black;
+      display: flex; align-items: center; justify-content: center;
+      cursor: url("images/Link-Select.png"), auto;
+      font-family: main, monospace;
+    }
+    #modal-close:active {
+      border-top: 2px solid #444; border-left: 2px solid #444;
+      border-bottom: 2px solid #fff; border-right: 2px solid #fff;
+    }
+    
+    #modal-body {
+      display: flex; gap: 0;
+    }
+    #modal-img-col {
+      width: 200px; flex-shrink: 0;
+      background: black;
+      position: relative; overflow: hidden;
+    }
+    /* VHS scanlines on modal image */
+    #modal-img-col::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 3px,
+        rgba(0,0,0,0.18) 3px, rgba(0,0,0,0.18) 4px
+      );
+      pointer-events: none; z-index: 2;
+    }
+    #modal-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* или contain если не хочешь обрезку */
+      display: block;
+    }
+    #modal-img-emoji {
+      width: 100%; height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 72px;
+      filter: drop-shadow(0 0 12px rgba(255,0,0,0.5));
+    }
+    #modal-info-col {
+      flex: 1;
+      padding: 12px;
+      background: #c0c0c0;
+    }
+    #modal-info-col * { background: transparent; }
+    #modal-tag {
+      display: inline-block;
+      font-size: 9px; padding: 1px 6px;
+      letter-spacing: 1px; margin-bottom: 8px;
+    }
+    #modal-name {
+      font-size: 14px; font-weight: bold; color: black;
+      margin-bottom: 6px; line-height: 1.3;
+    }
+    #modal-price {
+      font-family: whiterabbit, monospace;
+      font-size: 22px; color: #800000;
+      margin-bottom: 10px;
+    }
+    .modal-divider {
+      border: none;
+      border-top: 1px solid #aaa; border-bottom: 1px solid #fff;
+      margin: 8px 0;
+    }
+    #modal-desc {
+      font-size: 11px; color: #333;
+      line-height: 1.7; margin-bottom: 12px;
+    }
+    #modal-add-btn {
+      display: block; width: 100%;
+      padding: 6px;
+      background: #000080; color: white;
+      border-top: 2px solid #4444aa; border-left: 2px solid #4444aa;
+      border-bottom: 2px solid #000033; border-right: 2px solid #000033;
+      font-family: main, monospace; font-size: 12px;
+      text-align: center;
+      cursor: url("images/Link-Select.png"), auto;
+      margin-bottom: 5px;
+    }
+    #modal-add-btn:active {
+      border-top: 2px solid #000033; border-left: 2px solid #000033;
+      border-bottom: 2px solid #4444aa; border-right: 2px solid #4444aa;
+    }
+    #modal-footer {
+      background: #c0c0c0;
+      border-top: 1px solid #888;
+      padding: 3px 7px; display: flex; gap: 6px;
+    }
+    .modal-statusfield {
+      border-top: 2px solid #999; border-left: 2px solid #999;
+      border-bottom: 2px solid white; border-right: 2px solid white;
+      padding: 1px 8px; font-size: 10px; color: black;
+      flex: 1;
+    }
+    /* category color tag */
+    .product-tag {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      font-size: 9px;
+      padding: 1px 5px;
+      z-index: 2;
+      letter-spacing: 1px;
+    }
+    .tag-service { background: #000080; color: white; }
+    .tag-item    { background: #800000; color: white; }
+    .tag-special { background: #005000; color: white; }
+
+    .product-info {
+      padding: 7px;
+      background: #c0c0c0;
+    }
+    .product-info * { background: transparent; }
+    .product-name {
+      font-size: 11px;
+      font-weight: bold;
+      color: black;
+      margin-bottom: 3px;
+      line-height: 1.3;
+    }
+    .product-desc {
+      font-size: 10px;
+      color: #444;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .product-price {
+      font-family: whiterabbit, monospace;
+      font-size: 13px;
+      color: #800000;
+    }
+    .add-btn {
+      background: #c0c0c0;
+      border-top: 2px solid white;
+      border-left: 2px solid white;
+      border-bottom: 2px solid #444;
+      border-right: 2px solid #444;
+      font-family: main, monospace;
+      font-size: 10px;
+      color: black;
+      padding: 2px 7px;
+      cursor: url("images/Link-Select.png"), auto;
+    }
+    .add-btn:active {
+      border-top: 2px solid #444;
+      border-left: 2px solid #444;
+      border-bottom: 2px solid white;
+      border-right: 2px solid white;
+    }
+
+    /* ── STATUS BAR ── */
+    .status-bar {
+      background: #c0c0c0;
+      border-top: 1px solid #888;
+      padding: 2px 6px;
+      display: flex;
+      gap: 10px;
+    }
+    .status-field {
+      border-top: 2px solid #888;
+      border-left: 2px solid #888;
+      border-bottom: 2px solid white;
+      border-right: 2px solid white;
+      padding: 1px 8px;
+      font-size: 10px;
+      color: black;
+      background: transparent;
+      flex: 1;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      color: #888;
+    }
+    footer * { background: transparent; }
+
+    /* ── ERROR POPUP ── */
+    #error-popup {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 200;
+      width: 320px;
+    }
+    .error-window {
+      background: #c0c0c0;
+      border-top: 3px solid white;
+      border-left: 3px solid white;
+      border-bottom: 3px solid #444;
+      border-right: 3px solid #444;
+    }
+    .error-bar {
+      background: #000080;
+      padding: 3px 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .error-bar span { font-size: 11px; color: white; }
+    .error-body {
+      padding: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: transparent;
+    }
+    .error-icon { font-size: 32px; }
+    .error-msg { font-size: 12px; color: black; background: transparent; line-height: 1.6; }
+    .error-foot {
+      padding: 8px 16px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      background: transparent;
+    }
+    .error-btn {
+      min-width: 70px;
+      padding: 4px 12px;
+      background: #c0c0c0;
+      border-top: 2px solid white;
+      border-left: 2px solid white;
+      border-bottom: 2px solid #444;
+      border-right: 2px solid #444;
+      font-family: main, monospace;
+      font-size: 12px;
+      color: black;
+      cursor: url("images/Link-Select.png"), auto;
+      text-align: center;
+    }
+    .error-btn:active {
+      border-top: 2px solid #444; border-left: 2px solid #444;
+      border-bottom: 2px solid white; border-right: 2px solid white;
+    }
+
+    /* ── ADDED FLASH ── */
+    @keyframes added-flash {
+      0%   { background: #000080; }
+      100% { background: #c0c0c0; }
+    }
+    .flash { animation: added-flash 0.3s ease-out; }
+
+    a { text-decoration: none; color: inherit; }
+    a:hover { text-decoration: underline; cursor: url("images/Link-Select.png"), auto; }
+  </style>
+</head>
+<body>
+  <div class="crt"></div>
+  <div id="body1">
+    <div id="everything">
+
+      <!-- TOP NAV -->
+      <div id="topbar">
+        <nav>
+          <div><a href="index.html">⋆ Главная</a></div>
+          <div><p style="color:#f88;">Каталог</p></div>
+          <div><a href="gallery.html">Отзывы</a></div>
+          <div><a href="contact.html">Контакты</a></div>
+          <div><a href="blog.html">Блог</a></div>
+          <div><a href="about.html">О нас</a></div>
+        </nav>
+        <div style="font-size:10px;color:#555;">
+          <span style="color:#f00;animation:blink-rec 1s step-end infinite;display:inline-block;">● REC</span>
+          &nbsp;&nbsp;SP ▸▸ putinheaven.org
+        </div>
+      </div>
+
+      <!-- VHS CASSETTE HEADER -->
+      <div id="shop-header">
+        <div class="vhs-cassette-label">
+          <div class="vhs-label-inner">
+            <div class="vhs-title-block">
+              <div class="vhs-rec">● REC &nbsp; T-120 &nbsp; SP</div>
+              <div class="vhs-main-title">КАТАЛОГ</div>
+              <div class="vhs-subtitle">Товары возврату не подлежат </div>
+            </div>
+            <div class="vhs-meta">
+              <div>TAPE №: <span>VHS-67</span></div>
+              <div>FORMAT: <span>PAL / NTSC</span></div>
+              <div>RUN TIME: <span>∞ MIN</span></div>
+              <div>DO NOT REWIND</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN LAYOUT -->
+      <div id="shop-layout">
+
+        <!-- SIDEBAR -->
+        <div id="shop-sidebar">
+
+          <!-- FILTER -->
+          <div class="sidebar-window">
+            <div class="sidebar-titlebar">
+              <span>☠ Категории:</span>
+              <div class="sidebar-btn">_</div>
+            </div>
+            <div class="sidebar-content">
+              <p style="font-size:10px;color:#666;margin-bottom:8px;">Фильтр:</p>
+              <button class="filter-btn active" onclick="filterProducts('all',this)">⬛ Все товары</button>
+              <button class="filter-btn" onclick="filterProducts('service',this)">◈ Сервисы</button>
+              <button class="filter-btn" onclick="filterProducts('item',this)">◉ Мерч</button>
+              <button class="filter-btn" onclick="filterProducts('special',this)">★ Специальное</button>
+            </div>
+          </div>
+
+          <!-- CART -->
+          <div class="sidebar-window">
+            <div class="sidebar-titlebar">
+              <span>🪦 Корзина</span>
+              <div class="sidebar-btn">_</div>
+            </div>
+            <div class="sidebar-content">
+              <div class="cart-display">
+                <div class="cart-label">C:\CART\штуки.exe</div>
+                <div class="cart-item-list" id="cart-list">
+                  <div style="color:#555;font-size:10px;">[ пусто ]</div>
+                </div>
+                <div class="cart-total">
+                  ВСЕГО: <span id="cart-total">0.00</span>
+                </div>
+              </div>
+              <button class="checkout-btn" onclick="checkout()">
+                [ ЗАКАЗАТЬ ]
+              </button>
+            </div>
+          </div>
+
+          <!-- INFO -->
+          <div class="sidebar-window">
+            <div class="sidebar-titlebar">
+              <span>ℹ Важно</span>
+              <div class="sidebar-btn">?</div>
+            </div>
+            <div class="sidebar-content">
+              <p style="font-size:10px;line-height:1.6;">
+                Мы берём на себя<br>
+                все приготовления<br>
+                чтобы вам не<br>
+                пришлось<br>
+                вмешиваться.<br>
+                Основано в<br>
+                <span style="color:#800;">XX веке</span><br><br>
+
+                ⚠ Все сделки окончательны.<br>
+                Возврат невозможен.<br>
+              </p>
+            </div>
+          </div>
+
+        </div><!-- /sidebar -->
+
+        <!-- MAIN WINDOW -->
+        <div id="shop-main">
+          <div class="main-window">
+
+            <!-- TITLEBAR -->
+            <div class="main-titlebar">
+              <img class="title-icon" src="images/default.png">
+              <span class="title-text">♱ Каталог — Интересные товары и нужные вам сервисы</span>
+              <div class="win-btn"><img src="images/hide.png"></div>
+              <div class="win-btn"><img src="images/screen.png"></div>
+              <div class="win-btn"><img src="images/close.png"></div>
+            </div>
+
+            <!-- MENU BAR -->
+            <div class="menu-bar">
+              <div><u>F</u><span style="font-size:11px;">ile</span></div>
+              <div><u>E</u><span style="font-size:11px;">dit</span></div>
+              <div><u>V</u><span style="font-size:11px;">iew</span></div>
+              <div><u>C</u><span style="font-size:11px;">art</span></div>
+              <div><u>H</u><span style="font-size:11px;">elp</span></div>
+            </div>
+
+            <!-- ADDRESS BAR -->
+            <div class="address-bar">
+              <label>Address</label>
+              <div class="address-field">♱ putinheaven.org/shop.html</div>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="window-content">
+              <div class="cat-header">
+                <h2 id="cat-title">ВСЕ ТОВАРЫ</h2>
+                <span class="cat-count" id="cat-count">9 товар(ов)</span>
+              </div>
+
+              <div id="product-grid">
+                <!-- generated by JS -->
+              </div>
+            </div>
+
+            <!-- STATUS BAR -->
+            <div class="status-bar">
+              <div class="status-field" id="status-msg">9 товар(ов) | Ожидаем заказ.</div>
+              <div class="status-field" style="max-width:140px;">♱ версия магазина v1.488</div>
+            </div>
+
+          </div>
+        </div><!-- /shop-main -->
+
+      </div><!-- /shop-layout -->
+
+      <footer>
+        <p>✮ ⋆ ˚｡𖦹 ⋆｡°✩ С 18.11.1978 — ООО "ПУТЬ В РАЙ" ✮ ⋆ ˚｡𖦹 ⋆｡°✩</p>
+      </footer>
+
+    </div><!-- /everything -->
+  </div><!-- /body1 -->
+
+  <!-- PRODUCT MODAL -->
+  <div id="modal-overlay">
+    <div id="product-modal">
+      <div id="modal-titlebar">
+        <img id="modal-titlebar-icon" src="images/default.png">
+        <span id="modal-titlebar-text">♱ Детали товара</span>
+        <div id="modal-close" onclick="closeModal()">✕</div>
+      </div>
+      <div id="modal-body">
+        <div id="modal-img-col">
+          <!-- filled by JS -->
+        </div>
+        <div id="modal-info-col">
+          <div id="modal-tag"></div>
+          <div id="modal-name"></div>
+          <div id="modal-price"></div>
+          <hr class="modal-divider">
+          <div id="modal-desc"></div>
+          <button id="modal-add-btn" onclick="modalAddToCart()">[ ДОБАВИТЬ В КОРЗИНУ ]</button>
+        </div>
+      </div>
+      <div id="modal-footer">
+        <div class="modal-statusfield" id="modal-status">Выберите элемент для добавления.</div>
+        <div class="modal-statusfield" style="max-width:120px;">♱ item_view.exe</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ERROR POPUP -->
+  <div id="error-popup">
+    <div class="error-window">
+      <div class="error-bar">
+        <span id="error-title">⚠ ОЙ</span>
+        <div class="sidebar-btn" onclick="closeError()">✕</div>
+      </div>
+      <div class="error-body">
+        <div class="error-icon" id="error-icon">⚠</div>
+        <div class="error-msg" id="error-msg">Ваше сообщение.</div>
+      </div>
+      <div class="error-foot">
+        <button class="error-btn" onclick="closeError()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── PRODUCT DATA ──
+    // img: путь к фото относительно папки сайта, например "images/shop/urn.jpg"
+    // если img не задан или файл не найдёт — покажет emoji как fallback
+    const products = [
+      {
+        id: 1,
+        name: "Стандартная организация похорон",
+        desc: "Полный базовый пакет услуг по организации похорон в соответствии с действующими требованиями и традициями. Включает оформление всех необходимых документов, координацию с моргом и кладбищем, транспортировку тела, предоставление стандартного гроба, подготовку к прощальной церемонии и сопровождение процесса на всех этапах.  Родственники получают помощь в выборе места захоронения и времени проведения церемонии. Все действия выполняются строго по согласованию с семьёй.",
+        price: 666.00,
+        emoji: "",
+        img: "images/e4b3a386b646be2c364fd09843f586c2.jpg",
+        cat: "service",
+        tag: "СЕРВИС"
+      },
+      {
+        id: 2,
+        name: "Кремация по стандартному регламенту",
+        desc: "Кремация — по порядку, без суеты. Перед процедурой — зал тишины, близкие говорят последние слова. Процесс в лицензированном крематории. После завершения сотрудник собирает прах, проверяет, что ничего не перепутано, и передаёт родственникам в урне. При желании урну можно оставить у нас на хранение или мы поможем закопать. Сопровождение на каждом этапе, без лишних движений.",
+        price: 444.00,
+        emoji: "",
+        img: "images/0c032c7b97d38f2bee19ffd4304cd96c.jpg",
+        cat: "service",
+        tag: "СЕРВИС"
+      },
+      {
+        id: 3,
+        name: "Уборка могилы",
+        desc: "Родственники не всегда могут приезжать на кладбище. Мы приезжаем сами. Сотрудник открывает захоронение, проверяет состояние тела, поправляет одежду, если она сбилась, и закрывает обратно. Раз в месяц он протирает надгробие изнутри. Перед праздниками тело достают, припудривают лицо и укладывают заново — ровнее. Родственники получают фото с подписью «порядок восстановлен».",
+        price: 1313.00,
+        emoji: "",
+        img: "images/fd45d1b90eb4c7a7a784d4a3a8631535.jpg",
+        cat: "service",
+        tag: "СЕРВИС"
+      },
+      {
+        id: 12,
+        name: "Обеспечение досуга усопшего",
+        desc: "Раз в несколько месяцев мы достаём тело, одеваем и возим по местам, которые человек любил при жизни. Парк, бар, скамейка у подъезда. Тело сидит на заднем сиденье, пристёгнутое ремнём, во избежании побега. Сотрудник рядом. После поездки тело возвращается на место. Родственники могут смотреть со стороны или не присутствовать.",
+        price: 1313.00,
+        emoji: "",
+        img: "images/4e9bcb5ccbf944eb3e63dd83a0e411c1.jpg",
+        cat: "service",
+        tag: "СЕРВИС"
+      },
+      {
+        id: 4,
+        name: "Урна для праха",
+        desc: "Урна предназначена для хранения праха после завершённого пути. Это не предмет интерьера и не украшение — это закрытый сосуд, фиксирующий финальную точку присутствия.  Форма и материал подобраны так, чтобы не отвлекать внимание и не “оживлять” воспоминание, а наоборот — удерживать тишину. Поверхность матовая, глухая, без отражений, словно она не принадлежит этому пространству до конца.",
+        price: 89.00,
+        emoji: "",
+        img: "images/;ldksfj3.png",
+        cat: "item",
+        tag: "МЕРЧ"
+      },
+      {
+        id: 5,
+        name: "Обрядные атрибуты",
+        desc: "Набор не для общего доступа. Внутри — свечи из жира без маркировки, иглы без ушка, нити чёрного цвета и герметичная ёмкость с содержимым без опознавательных знаков. По запросу — органы от невостребованных тел. Сотрудник привозит, уходит, не отвечает на вопросы. Возвращать ёмкость обязательно. Если не вернуть — сотрудник придёт сам.",
+        price: 120.00,
+        emoji: "",
+        img: "images/Без имени-1.png",
+        cat: "item",
+        tag: "МЕРЧ"
+      },
+      {
+        id: 6,
+        name: "Мемориальные кассеты",
+        desc: "Архивные записи, которые не выходят за пределы агентства. На плёнке — финальные минуты человека, работа с телом после остановки, а также сцены с ножом, электроинструментом и групповым участием по особому запросу. В конце каждой кассеты — голос на неизвестном языке при выключенном свете. Кассету нельзя перезаписывать или показывать посторонним. Через неделю сотрудник забирает её лично. Если не отдать — он заберёт сам вместе с носителем.",
+        price: 55.00,
+        emoji: "",
+        img: "images/cb78911651053788dc1dff8fbc39c1be.jpg",
+        cat: "item",
+        tag: "МЕРЧ"
+      },
+      {
+        id: 7,
+        name: "Избавление от тела",
+        desc: "Услуга для тех случаев, когда не планируются похороны, кремацию или другие ритуалы. Сотрудник приезжает, забирает тело, не задаёт вопросов, вывозит и передаёт в лицензированное учреждение для утилизации без возврата останков. Никаких документов на руки, никаких урн, никаких памятных мест. Тело считается израсходованным.",
+        price: 333.00,
+        emoji: "",
+        img: "images/fcbfa68b7415fcbc5b3f9ea906b7ea63.jpg",
+        cat: "special",
+        tag: "СПЕЦИАЛЬНОЕ"
+      },
+      {
+        id: 8,
+        name: "Особые молитвы",
+        desc: "Особые молитвы читаются в исключительных случаях, когда стандартные обряды уже не дают ощущения завершённости. Это закрытый чин, проводимый в ограниченном составе, с минимальным присутствием посторонних и строгим соблюдением внутреннего порядка.",
+        price: 199.00,
+        emoji: "",
+        img: "images/d491e3dc71d8cb9e0c1e5d244f262cef.jpg",
+        cat: "service",
+        tag: "СЕРВИС"
+      },
+      {
+        id: 9,
+        name: "Возврат",
+        desc: "Иногда человек уходит раньше, чем успевает закончить дела. Мы помогаем организовать краткосрочное возвращение домой для прощания с близкими и решения семейных вопросов.  В услугу входит сопровождение сотрудника, подготовка помещения и повторное оформление документов. Средняя продолжительность возврата — от 20 до 40 минут.  Родственникам рекомендуется заранее убрать из квартиры домашних животных и маленьких детей. После завершения процедуры клиент обычно ведёт себя спокойно и почти ни на кого не смотрит.",
+        price: 13.00,
+        emoji: "",
+        img: "images/3c4924233ec9de315dfb792713f98de6.jpg",
+        cat: "special",
+        tag: "СПЕЦИАЛЬНОЕ"
+      },
+      {
+        id: 10,
+        name: "Пожертвование тела",
+        desc: "Добровольная передача тела в рамках закрытого ритуально-научного протокола. Процедура проводится как акт символического отказа от земной формы и фиксации завершённого пути.  После оформления согласия тело передаётся в сопровождение нашей службы, где проходит подготовку и дальнейшее использование в рамках утверждённого цикла — кремационного, архивного или мемориального. Семья может не присутствовать при этапах, сохраняя дистанцию и тишину происходящего.  Каждое “пожертвование” фиксируется как завершённая точка существования в реестре “Пути”, с последующим ритуальным закрытием имени.",
+        price: 0.00,
+        emoji: "",
+        img: "images/29b43ed713e6efdf222bc86ae302d157.jpg",
+        cat: "special",
+        tag: "СПЕЦИАЛЬНОЕ"
+      },
+      {
+        id: 11,
+        name: "Достойный уход",
+        desc: "Услуга для тех, кто решил завершить жизнь осознанно и хочет соблюсти религиозные или личные правила. С клиентом находится сотрудник агентства, при необходимости — священник. Зажигаются свечи, читаются молитвы, составляется короткое письмо для родственников. Всё в закрытой комнате, без посторонних. Процедура занимает 20–40 минут. После завершения человек лежит спокойно, лицо расслаблено. Тело переходит в собственность нашей организации. Захоронение — непредусмотренно.",
+        price: 0.00,
+        emoji: "",
+        img: "images/e62e6a8c3d444017a3c0d05e2717570b.jpg",
+        cat: "service",
+        tag: "СЕРВИС"
+      }
+    ];
+
+    // ── STATE ──
+    let cart = [];
+    let currentModalId = null;
+
+    // ── TAG CLASSES ──
+    const tagClass = { service: 'tag-service', item: 'tag-item', special: 'tag-special' };
+
+    // ── RENDER PRODUCTS ──
+    function renderProducts(filter = 'all') {
+      const grid = document.getElementById('product-grid');
+      const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
+      grid.innerHTML = '';
+
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.dataset.cat = p.cat;
+
+        // image or emoji fallback
+        const imgHTML = p.img
+          ? `<img class="product-img" src="${p.img}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+             <div class="product-emoji" style="display:none;">${p.emoji}</div>`
+          : `<div class="product-emoji">${p.emoji}</div>`;
+
+        card.innerHTML = `
+          <div class="product-img-area" onclick="openModal(${p.id})">
+            <span class="product-tag ${tagClass[p.cat]}">${p.tag}</span>
+            ${imgHTML}
+          </div>
+          <div class="product-info" onclick="openModal(${p.id})" style="cursor:url('images/Link-Select.png'),auto;">
+            <div class="product-name">${p.name}</div>
+            <div class="product-desc">${p.desc.substring(0, 72)}${p.desc.length > 72 ? '…' : ''}</div>
+            <div class="product-footer">
+              <div class="product-price">${p.price.toFixed(2)} BYN</div>
+              <button class="add-btn" onclick="event.stopPropagation(); addToCart(${p.id}, this)">[ КУПИТЬ ]</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      document.getElementById('cat-count').textContent = `${filtered.length} товар(ов)${filtered.length !== 1 ? '' : ''}`;
+      document.getElementById('status-msg').textContent = `${filtered.length} товар(ов) | Ожидаем ваш заказ.`;
+    }
+
+    // ── MODAL ──
+    function openModal(id) {
+      const p = products.find(x => x.id === id);
+      if (!p) return;
+      currentModalId = id;
+
+      document.getElementById('modal-titlebar-text').textContent = ` ${p.name}`;
+      document.getElementById('modal-tag').textContent = p.tag;
+      document.getElementById('modal-tag').className = '';
+      document.getElementById('modal-tag').classList.add(tagClass[p.cat]);
+      document.getElementById('modal-tag').style.cssText = 'display:inline-block;font-size:9px;padding:1px 6px;letter-spacing:1px;margin-bottom:8px;';
+      document.getElementById('modal-name').textContent = p.name;
+      document.getElementById('modal-price').textContent = `${p.price.toFixed(2)} BYN`;
+      document.getElementById('modal-desc').textContent = p.desc;
+      document.getElementById('modal-status').textContent = `${p.tag} — ref. #${String(p.id).padStart(4,'0')}`;
+
+      // image col
+      const imgCol = document.getElementById('modal-img-col');
+      if (p.img) {
+        imgCol.innerHTML = `
+          <img id="modal-img" src="${p.img}" alt="${p.name}"
+            onerror="this.style.display='none';document.getElementById('modal-img-emoji').style.display='flex';">
+          <div id="modal-img-emoji" style="display:none;" class="">${p.emoji}</div>
+        `;
+        // apply emoji div styles via class
+        const emojiDiv = imgCol.querySelector('#modal-img-emoji');
+        emojiDiv.style.cssText = 'width:100%;height:200px;display:none;align-items:center;justify-content:center;font-size:72px;filter:drop-shadow(0 0 12px rgba(255,0,0,0.5));';
+      } else {
+        imgCol.innerHTML = `<div style="width:100%;height:200px;display:flex;align-items:center;justify-content:center;font-size:72px;filter:drop-shadow(0 0 12px rgba(255,0,0,0.5));">${p.emoji}</div>`;
+      }
+
+      document.getElementById('modal-overlay').classList.add('open');
+      setStatus(`Viewing: ${p.name}`);
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('open');
+      currentModalId = null;
+    }
+
+    // close on overlay click
+    document.getElementById('modal-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // close on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    function modalAddToCart() {
+      if (!currentModalId) return;
+      const btn = document.getElementById('modal-add-btn');
+      addToCartById(currentModalId);
+      const orig = btn.textContent;
+      btn.textContent = '[ ✓ ДОБАВЛЕН ]';
+      setTimeout(() => { btn.textContent = orig; }, 700);
+    }
+
+    // ── FILTER ──
+    function filterProducts(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const titles = { all: 'ВСЕ ТОВАРЫ', service: 'СЕРВИСЫ', item: 'МЕРЧ', special: 'СПЕЦИАЛЬНОЕ' };
+      document.getElementById('cat-title').textContent = titles[cat];
+      renderProducts(cat);
+    }
+
+    // ── ADD TO CART ──
+    function addToCartById(id) {
+      const product = products.find(p => p.id === id);
+      const existing = cart.find(c => c.id === id);
+      if (existing) existing.qty++;
+      else cart.push({ ...product, qty: 1 });
+      updateCartUI();
+      setStatus(`Добавлен: ${product.name}`);
+    }
+
+    function addToCart(id, btn) {
+      addToCartById(id);
+      const orig = btn.textContent;
+      btn.textContent = '[ ✓ ДОБАВЛЕН ]';
+      btn.classList.add('flash');
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('flash'); }, 600);
+    }
+
+    // ── REMOVE FROM CART ──
+    function removeFromCart(id) {
+      cart = cart.filter(c => c.id !== id);
+      updateCartUI();
+    }
+
+    // ── UPDATE CART UI ──
+    function updateCartUI() {
+      const list = document.getElementById('cart-list');
+      const totalEl = document.getElementById('cart-total');
+      if (cart.length === 0) {
+        list.innerHTML = '<div style="color:#555;font-size:10px;">[ пусто ]</div>';
+        totalEl.textContent = '0.00';
+        return;
+      }
+      list.innerHTML = cart.map(c => `
+        <div class="cart-row">
+          <span style="font-size:10px;">${c.emoji} ${c.name.substring(0,14)}${c.name.length>14?'…':''} ×${c.qty}</span>
+          <button class="remove-btn" onclick="removeFromCart(${c.id})">[x]</button>
+        </div>
+      `).join('');
+      const total = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
+      totalEl.textContent = total.toFixed(2) + " BYN";
+    }
+
+    // ── CHECKOUT ──
+    function checkout() {
+      if (cart.length === 0) {
+        showError('⚰️', 'Корзина пуста', 'В вашей корзине пусто.\nПожалуйста добавте товары \nпрежде чем продолжить.');
+        return;
+      }
+      const total = cart.reduce((sum, c) => sum + c.price * c.qty, 0);
+      showError('', 'Заказ получен', `Спасибо за ваш заказ.\nИТОГО: ${total.toFixed(2)} BYN\n\nСкоро кто-нибудь с вами свяжется.\nНе переживайте мы вас найдём!`);
+      cart = [];
+      updateCartUI();
+    }
+
+    // ── ERROR POPUP ──
+    function showError(icon, title, msg) {
+      document.getElementById('error-icon').textContent = icon;
+      document.getElementById('error-title').textContent = title;
+      document.getElementById('error-msg').textContent = msg;
+      document.getElementById('error-popup').style.display = 'block';
+    }
+    function closeError() {
+      document.getElementById('error-popup').style.display = 'none';
+    }
+
+    // ── STATUS ──
+    function setStatus(msg) {
+      document.getElementById('status-msg').textContent = msg;
+      setTimeout(() => {
+        const count = document.getElementById('cat-count').textContent;
+        document.getElementById('status-msg').textContent = `${count} | Ожидаем ваш заказ.`;
+      }, 2000);
+    }
+
+    // ── INIT ──
+    renderProducts();
+  </script>
+  <script src="vhs-transition.js"></script> 
+  <script src="ambient-audio.js"></script>
+</body>
+</html>
