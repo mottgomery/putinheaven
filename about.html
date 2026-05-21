@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ABOUT — FATAL ERROR</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:   #0a2fff;
+      --lblue:  #1a3fff;
+      --white:  #d8d8ff;
+      --dim:    #8888cc;
+      --cursor: #c8c8ff;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: var(--blue);
+      color: var(--white);
+      font-family: 'Share Tech Mono', 'Courier New', monospace;
+      cursor: none;
+    }
+
+    /* ── SCANLINES OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,20,0.28) 2px,
+        rgba(0,0,20,0.28) 4px
+      );
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* ── CRT VIGNETTE ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse at center,
+        transparent 55%,
+        rgba(0,0,30,0.70) 100%
+      );
+      pointer-events: none;
+      z-index: 101;
+    }
+
+    /* ── NOISE LAYER ── */
+    #noise {
+      position: fixed; inset: 0;
+      z-index: 99;
+      opacity: 0.055;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      animation: noiseShift 0.12s steps(1) infinite;
+    }
+    @keyframes noiseShift {
+      0%   { background-position:   0px   0px; }
+      20%  { background-position: -55px  30px; }
+      40%  { background-position:  40px -50px; }
+      60%  { background-position: -20px  70px; }
+      80%  { background-position:  80px -10px; }
+      100% { background-position:   0px   0px; }
+    }
+
+    /* ── CHROMA ABERRATION ── */
+    #chroma {
+      position: fixed; inset: 0;
+      z-index: 98;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.18;
+      background: linear-gradient(
+        90deg,
+        rgba(255,0,0,0.12) 0%,
+        transparent 25%,
+        transparent 75%,
+        rgba(0,200,255,0.12) 100%
+      );
+      animation: chromaShift 0.2s steps(1) infinite;
+    }
+    @keyframes chromaShift {
+      0%  { transform: translateX(0px); }
+      33% { transform: translateX(-2px); }
+      66% { transform: translateX(2px); }
+      100%{ transform: translateX(0px); }
+    }
+
+    /* ── GLITCH TEAR ── */
+    #tear {
+      position: fixed; left: 0; right: 0; height: 3px;
+      background: rgba(200,220,255,0.55);
+      z-index: 102;
+      pointer-events: none;
+      animation: tearAnim 4s steps(1) infinite;
+    }
+    @keyframes tearAnim {
+      0%,79%,100% { opacity: 0; top: 40%; }
+      80% { opacity: 1; top: 23%; height: 2px; }
+      85% { opacity: 0.6; top: 71%; height: 4px; }
+      90% { opacity: 1; top: 48%; height: 2px; }
+      95% { opacity: 0; top: 60%; }
+    }
+
+    /* ── VHS TRACKING BAR (occasional) ── */
+    #track {
+      position: fixed; left: 0; right: 0; height: 50px;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        rgba(180,200,255,0.10) 20%,
+        rgba(180,200,255,0.22) 50%,
+        rgba(180,200,255,0.10) 80%,
+        transparent 100%
+      );
+      z-index: 103;
+      pointer-events: none;
+      top: -50px;
+      animation: trackSweep 6s ease-in-out infinite;
+    }
+    @keyframes trackSweep {
+      0%,30%   { top: -50px; opacity: 0; }
+      32%      { opacity: 1; }
+      70%      { top: calc(100vh + 50px); opacity: 1; }
+      72%,100% { top: calc(100vh + 50px); opacity: 0; }
+    }
+
+    /* ── MAIN CONTENT ── */
+    #screen {
+      position: relative;
+      z-index: 10;
+      width: 100%; height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: clamp(32px, 6vw, 90px) clamp(32px, 8vw, 120px);
+      gap: 0;
+    }
+
+    /* Emoji */
+    .bsod-emoji {
+      font-size: clamp(52px, 8vw, 96px);
+      line-height: 1;
+      margin-bottom: clamp(24px, 3vw, 40px);
+      animation: emojiGlitch 7s steps(1) infinite;
+      display: inline-block;
+      filter: drop-shadow(0 0 18px rgba(100,140,255,0.6));
+    }
+    @keyframes emojiGlitch {
+      0%,88%,100% { transform: translate(0,0) skew(0deg); filter: drop-shadow(0 0 18px rgba(100,140,255,0.6)); }
+      89% { transform: translate(-4px, 2px) skew(-3deg); filter: drop-shadow(0 0 30px rgba(255,100,100,0.8)); }
+      90% { transform: translate(4px,-2px) skew(2deg); filter: drop-shadow(0 0 30px rgba(100,255,200,0.8)); }
+      91% { transform: translate(0,0) skew(0deg); filter: drop-shadow(0 0 18px rgba(100,140,255,0.6)); }
+    }
+
+    /* Title */
+    .bsod-title {
+      font-size: clamp(22px, 3.5vw, 46px);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin-bottom: clamp(20px, 2.5vw, 34px);
+      line-height: 1.2;
+      color: var(--white);
+      animation: titleFlicker 9s steps(1) infinite;
+    }
+    @keyframes titleFlicker {
+      0%,94%,100% { opacity: 1; }
+      95% { opacity: 0.3; }
+      96% { opacity: 1; }
+      97% { opacity: 0.5; }
+      98% { opacity: 1; }
+    }
+
+    /* Error block */
+    .bsod-error {
+      max-width: clamp(320px, 62vw, 780px);
+      font-size: clamp(13px, 1.6vw, 18px);
+      line-height: 1.75;
+      color: var(--white);
+      margin-bottom: clamp(28px, 3.5vw, 48px);
+      opacity: 0.92;
+    }
+
+    .bsod-error p + p { margin-top: 1em; }
+
+    .bsod-error .code {
+      display: inline-block;
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(200,210,255,0.25);
+      padding: 2px 10px;
+      letter-spacing: 0.12em;
+      font-size: 0.88em;
+      color: var(--white);
+      margin: 2px 0;
+    }
+
+    /* QR-like block / progress dots */
+    .bsod-collecting {
+      font-size: clamp(11px, 1.2vw, 14px);
+      color: var(--dim);
+      margin-bottom: clamp(36px, 4.5vw, 60px);
+      letter-spacing: 0.06em;
+    }
+
+    .bsod-collecting .dots {
+      display: inline-block;
+      animation: dotsAnim 1.4s steps(1) infinite;
+    }
+    @keyframes dotsAnim {
+      0%  { content: ''; }
+      25% { opacity: 0.4; }
+      50% { opacity: 0.7; }
+      75% { opacity: 1; }
+      100%{ opacity: 0.4; }
+    }
+
+    /* Divider */
+    .bsod-hr {
+      width: clamp(200px, 40vw, 560px);
+      height: 1px;
+      background: rgba(200,210,255,0.22);
+      margin-bottom: clamp(24px, 3vw, 40px);
+    }
+
+    /* Press any key */
+    .bsod-press {
+      font-size: clamp(14px, 1.8vw, 20px);
+      letter-spacing: 0.15em;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .bsod-press .cursor-block {
+      display: inline-block;
+      width: 0.6em;
+      height: 1.1em;
+      background: var(--cursor);
+      margin-left: 4px;
+      vertical-align: text-bottom;
+      animation: cursorBlink 0.9s step-end infinite;
+    }
+    @keyframes cursorBlink {
+      0%,100% { opacity: 1; }
+      50%     { opacity: 0; }
+    }
+
+    /* Error code bottom right */
+    .bsod-errcode {
+      position: fixed;
+      bottom: clamp(18px, 3vh, 36px);
+      right: clamp(18px, 3vw, 48px);
+      font-size: clamp(10px, 1vw, 13px);
+      color: var(--dim);
+      letter-spacing: 0.1em;
+      opacity: 0.55;
+      z-index: 10;
+      text-align: right;
+    }
+
+    /* Custom cursor */
+    #custom-cursor {
+      position: fixed;
+      width: 12px; height: 12px;
+      background: var(--white);
+      z-index: 9999;
+      pointer-events: none;
+      mix-blend-mode: difference;
+      transition: transform 0.08s ease;
+    }
+
+    /* Whole-page glitch shift (rare) */
+    #screen {
+      animation: screenGlitch 11s steps(1) infinite;
+    }
+    @keyframes screenGlitch {
+      0%,91%,100% { transform: translate(0,0); filter: none; }
+      92% { transform: translate(-6px, 3px); filter: hue-rotate(30deg) saturate(1.4); }
+      93% { transform: translate(6px, -3px); filter: hue-rotate(-30deg); }
+      94% { transform: translate(-2px, 0);   filter: none; }
+      95% { transform: translate(0,0); filter: none; }
+    }
+
+    /* ── FADE IN on load ── */
+    #screen { opacity: 0; animation: fadeIn 0.6s 0.3s ease-out forwards, screenGlitch 11s 1s steps(1) infinite; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── KEYBOARD LISTENER hint ── */
+    .bsod-press { cursor: pointer; }
+    .bsod-press:hover .cursor-block { background: #fff; }
+
+  </style>
+</head>
+<body>
+
+  <div id="noise"></div>
+  <div id="chroma"></div>
+  <div id="tear"></div>
+  <div id="track"></div>
+
+  <div id="screen">
+
+    <div class="bsod-emoji">:(</div>
+
+    <div class="bsod-title">
+      НА ВАШЕМ УСТРОЙСТВЕ ВОЗНИКЛА ПРОБЛЕМА<br>
+      И ЕГО НЕОБХОДИМО ПЕРЕЗАГРУЗИТЬ.
+    </div>
+
+    <div class="bsod-error">
+      <p>
+        Мы собираем сведения об ошибке, и после этого компьютер будет перезапущен.<br>
+        Код остановки: <span class="code">ГРЕХОПАДЕНИЕ_НЕИЗБЕЖНО</span>
+      </p>
+      <p>
+        Покайтесь во грехе, ибо не ведаете вы чего творите.<br>
+        Пути ваши — суть тропы в никуда, а помыслы — аки дым над болотом.<br>
+        Ибо сказано: всякий кто нажимает кнопку — да будет спасён,<br>
+        а кто медлит — пусть сидит и смотрит на полосы развёртки.
+      </p>
+      <p>
+        Проверьте не грешили ли вы сегодня, а ежели да —<br>
+        то прочтите молитву и нажмите любую клавишу для продолжения.<br>
+        Система не несёт ответственности за состояние вашей души.<br>
+        <span class="code">SOUL_DUMP_COMPLETE: 0xDEAD_BEEF_SINFUL</span>
+      </p>
+    </div>
+
+    <div class="bsod-collecting">
+      Сбор сведений о грехах: <span id="pct">0</span>% завершено<span class="dots" id="dots">...</span>
+    </div>
+
+    <div class="bsod-hr"></div>
+
+    <div class="bsod-press" id="pressBtn" title="Нажми любую клавишу">
+      Нажмите любую клавишу для возврата к исходному коду_<span class="cursor-block"></span>
+    </div>
+
+  </div>
+
+  <div class="bsod-errcode">
+    STOP: 0x000000SIN (0xCAFEBABE, 0xDEADBEEF,<br>
+    0x13374C1F, 0xB16B00B5)<br>
+    about.html — ADDRESS 0xFFFF_FORGIVEN
+  </div>
+
+  <div id="custom-cursor"></div>
+
+  <!-- VHS TRANSITION (same as site) -->
+  <script src="vhs-transition.js"></script>
+  <!-- AMBIENT AUDIO (same as site) -->
+  <script src="ambient-audio.js"></script>
+
+  <script>
+    /* ── Custom cursor ── */
+    const cur = document.getElementById('custom-cursor');
+    document.addEventListener('mousemove', e => {
+      cur.style.left = (e.clientX - 6) + 'px';
+      cur.style.top  = (e.clientY - 6) + 'px';
+    });
+
+    /* ── Progress counter ── */
+    const pctEl = document.getElementById('pct');
+    let pct = 0;
+    const ticker = setInterval(() => {
+      const jump = Math.random() < 0.3 ? Math.floor(Math.random() * 4) : 1;
+      pct = Math.min(pct + jump, 100);
+      pctEl.textContent = pct;
+      if (pct >= 100) {
+        clearInterval(ticker);
+        document.getElementById('dots').textContent = ' — ЗАВЕРШЕНО';
+      }
+    }, 120);
+
+    /* ── Press any key → go home ── */
+    function goHome() {
+      // try vhsTransition if the script loaded, else fallback
+      if (typeof vhsTransition === 'function') {
+        vhsTransition('index.html');
+      } else {
+        // manually trigger the click-intercept by clicking a temp link
+        const a = document.createElement('a');
+        a.href = 'index.html';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      }
+    }
+
+    document.addEventListener('keydown', goHome);
+    document.getElementById('pressBtn').addEventListener('click', goHome);
+    document.addEventListener('touchstart', goHome, { once: true });
+  </script>
+
+</body>
+</html>
